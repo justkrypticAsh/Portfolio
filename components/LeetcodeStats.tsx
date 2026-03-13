@@ -14,7 +14,7 @@ export default function LeetcodeStats() {
             <FaTerminal className="text-yellow-500 text-xl" />
           </div>
           <h2 className="text-3xl font-bold tracking-tighter uppercase">
-            Algorithmic Prowess
+            Algorithmic Process
           </h2>
           <div className="h-1 w-12 bg-yellow-500 mt-2 rounded-full opacity-50" />
         </div>
