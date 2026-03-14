@@ -10,6 +10,7 @@ import GithubStats from "@/components/GithubStats"
 import ParticlesBackground from "@/components/ParticlesBackground"
 import LiquidBackground from "@/components/LiquidBackground"
 import LeetcodeStats from "@/components/LeetcodeStats"
+import CodolioSection from "@/components/CodolioSection" // <--- Naya Import
 import CursorGlow from "@/components/CursorGlow"
 import Timeline from "@/components/Timeline"
 
@@ -176,6 +177,11 @@ export default function Home() {
         
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={sectionReveal}>
           <LeetcodeStats />
+        </motion.div>
+
+        {/* CODOLIO SECTION - Added Professionally here */}
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={sectionReveal}>
+          <CodolioSection />
         </motion.div>
       </section>
 
