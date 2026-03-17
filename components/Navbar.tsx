@@ -1,7 +1,9 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { useState, useEffect } from "react"
+import { useTheme } from "next-themes"
+import { Sun, Moon } from "lucide-react"
 
 interface NavbarProps {
   activeSection: string;
@@ -10,83 +12,98 @@ interface NavbarProps {
 
 export default function Navbar({ activeSection, setSection }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false)
+  const { setTheme, resolvedTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50)
+    setMounted(true)
+    const handleScroll = () => setScrolled(window.scrollY > 20)
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  const navLinks = [
-    { name: "About", id: "about" },
-    { name: "Projects", id: "projects" },
-    { name: "Journey", id: "journey" },
-    { name: "Contact", id: "contact" },
-  ]
+  if (!mounted) return null
+
+  const isDark = resolvedTheme === "dark"
 
   const handleNavClick = (id: string) => {
-    if (id === "about" || id === "projects") {
-      // 1. Pehle section switch karo
-      setSection(id)
-      // 2. Phir us container tak scroll karo jahan about/projects dikhte hain
-      const contentArea = document.getElementById("toggle-area")
-      if (contentArea) {
-        contentArea.scrollIntoView({ behavior: "smooth", block: "start" })
-      }
-    } else {
-      // Journey aur Contact ke liye normal scroll
-      const element = document.getElementById(id)
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" })
-      }
+    setSection(id);
+    if (id === "home") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    const targetId = (id === "about" || id === "projects") ? "main-content" : id;
+    const element = document.getElementById(targetId)
+    if (element) {
+      const offset = 100;
+      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+      window.scrollTo({ top: elementPosition - offset, behavior: "smooth" });
     }
   }
 
   return (
-    <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${
-        scrolled ? "py-4 bg-black/80 backdrop-blur-md border-b border-white/5" : "py-8 bg-transparent"
-      }`}
-    >
+    <nav className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${scrolled ? "py-4 bg-background/80 backdrop-blur-md" : "py-8 bg-transparent"}`}>
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-        <div 
-          className="text-xl font-black tracking-tighter cursor-pointer"
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        
+        {/* --- LOGO --- */}
+        <motion.div 
+          onClick={() => handleNavClick('home')}
+          className="cursor-pointer font-black text-xl tracking-tighter text-foreground uppercase group"
         >
           ASHISH<span className="text-purple-500">.</span>
+        </motion.div>
+
+        {/* --- MINIMALIST NAV --- */}
+        <div className="flex items-center gap-8">
+          <div className="flex items-center gap-6">
+            {["home", "about", "projects", "journey"].map((id) => (
+              <button 
+                key={id} 
+                onClick={() => handleNavClick(id)} 
+                className="relative py-1 group"
+              >
+                <span className={`text-[10px] font-black uppercase tracking-[0.2em] transition-colors duration-300 ${
+                  activeSection === id ? "text-foreground" : "text-zinc-500 hover:text-foreground/80"
+                }`}>
+                  {id}
+                </span>
+                
+                {/* PRECISE PURPLE LINE INDICATOR */}
+                {activeSection === id && (
+                  <motion.div 
+                    layoutId="nav-underline"
+                    className="absolute -bottom-1 left-0 right-0 h-[2px] bg-purple-500"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+              </button>
+            ))}
+          </div>
+
+          {/* THEME TOGGLE */}
+          <button
+            onClick={() => setTheme(isDark ? "light" : "dark")}
+            className="ml-4 p-2 transition-transform hover:scale-110"
+          >
+            {isDark ? (
+              <Sun size={14} className="text-yellow-500" />
+            ) : (
+              <Moon size={14} className="text-foreground" />
+            )}
+          </button>
         </div>
 
-        <div className="hidden md:flex items-center gap-10">
-          {navLinks.map((link) => (
-            <button
-              key={link.id}
-              onClick={() => handleNavClick(link.id)}
-              className="relative group"
-            >
-              <span className={`text-[10px] font-bold uppercase tracking-[0.2em] transition-colors ${
-                activeSection === link.id ? "text-white" : "text-gray-500 group-hover:text-white"
-              }`}>
-                {link.name}
-              </span>
-              {activeSection === link.id && (
-                <motion.div 
-                  layoutId="nav-glow"
-                  className="absolute -bottom-2 left-0 right-0 h-[2px] bg-purple-500 shadow-[0_0_10px_#a855f7]"
-                />
-              )}
-            </button>
-          ))}
-        </div>
-
-        <button 
-          onClick={() => handleNavClick('contact')}
-          className="px-6 py-2 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded-full hover:invert transition-all active:scale-95"
+        {/* --- LET'S TALK --- */}
+        <motion.button 
+          whileHover={{ y: -2 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+          className="hidden md:block px-8 py-3 bg-foreground text-background text-[10px] font-black uppercase tracking-[0.2em] rounded-full transition-all shadow-lg hover:shadow-purple-500/10"
         >
           Let's Talk
-        </button>
+        </motion.button>
+
       </div>
-    </motion.nav>
+    </nav>
   )
 }

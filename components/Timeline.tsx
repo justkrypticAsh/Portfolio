@@ -11,7 +11,7 @@ const journey = [
     location: "Birth",
     desc: "Where the journey started. A future engineer in the making.",
     icon: <FaBaby />,
-    color: "#ffffff" 
+    color: "#6366f1" 
   },
   {
     date: "2020",
@@ -19,7 +19,7 @@ const journey = [
     location: "High School",
     desc: "Completed 10th grade with a curious mind, starting to explore the world of logic.",
     icon: <FaSchool />,
-    color: "#60A5FA" // Blue
+    color: "#3B82F6"
   },
   {
     date: "2023",
@@ -27,7 +27,7 @@ const journey = [
     location: "Science Stream",
     desc: "Finished schooling with a focus on Mathematics and Physics, setting the stage for Engineering.",
     icon: <FaBook />,
-    color: "#F472B6" // Pink
+    color: "#EC4899"
   },
   {
     date: "2024",
@@ -35,7 +35,7 @@ const journey = [
     location: "CS Engineering",
     desc: "Started B.Tech journey. Laid the foundation with C programming and core hardware fundamentals.",
     icon: <FaMicrochip />,
-    color: "#10B981" // Green
+    color: "#10B981"
   },
   {
     date: "2025",
@@ -43,7 +43,7 @@ const journey = [
     location: "Backend Focus",
     desc: "Deep-dived into the Java ecosystem. Mastering OOPs, JDBC, and building server-side applications.",
     icon: <FaJava />,
-    color: "#FBBF24" // Yellow/Gold
+    color: "#F59E0B"
   },
   {
     date: "Mid 2025",
@@ -51,7 +51,7 @@ const journey = [
     location: "Algorithms & Logic",
     desc: "Started the Data Structures & Algorithms journey to sharpen problem-solving skills.",
     icon: <FaTerminal />,
-    color: "#A855F7" // Purple
+    color: "#8B5CF6"
   },
   {
     date: "Present",
@@ -59,7 +59,7 @@ const journey = [
     location: "Building Digital Products",
     desc: "Practicing advanced DSA daily and crafting high-end web experiences like this portfolio.",
     icon: <FaCode />,
-    color: "#ffffff" 
+    color: "#6366f1" 
   }
 ]
 
@@ -79,8 +79,8 @@ export default function Timeline() {
   return (
     <div ref={ref} className="max-w-4xl mx-auto px-6 relative py-20">
       
-      {/* CENTRAL LINE */}
-      <div className="absolute left-4 md:left-1/2 transform md:-translate-x-1/2 top-0 bottom-0 w-[2px] bg-white/10">
+      {/* CENTRAL LINE - Light theme visibility fixed */}
+      <div className="absolute left-4 md:left-1/2 transform md:-translate-x-1/2 top-0 bottom-0 w-[2px] bg-foreground/10 dark:bg-white/10">
         <motion.div 
           style={{ scaleY, originY: 0 }}
           className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-purple-500 via-blue-500 to-transparent"
@@ -99,33 +99,34 @@ export default function Timeline() {
               i % 2 === 0 ? "md:flex-row-reverse" : ""
             }`}
           >
-            {/* ICON / GLOWING POINT */}
+            {/* ICON / GLOWING POINT - Theme Adaptive BG */}
             <div 
-              className="absolute left-4 md:left-1/2 transform -translate-x-1/2 w-10 h-10 bg-black border-2 rounded-full z-10 flex items-center justify-center shadow-[0_0_20px_rgba(0,0,0,1)]"
+              className="absolute left-4 md:left-1/2 transform -translate-x-1/2 w-10 h-10 bg-background border-2 rounded-full z-10 flex items-center justify-center shadow-xl transition-colors"
               style={{ borderColor: item.color }}
             >
               <div className="text-sm" style={{ color: item.color }}>{item.icon}</div>
             </div>
 
-            {/* CONTENT CARD */}
-            <div className="w-full md:w-[42%] ml-12 md:ml-0 bg-[#0a0a0a] border border-white/10 p-8 rounded-[2rem] hover:border-white/30 transition-all group shadow-2xl">
-              {/* DATE - FIXED OPACITY & COLOR */}
+            {/* CONTENT CARD - The Projects Style Fix */}
+            <div className="w-full md:w-[42%] ml-12 md:ml-0 bg-foreground/[0.03] dark:bg-white/[0.02] backdrop-blur-xl border border-foreground/10 dark:border-white/10 p-8 rounded-[2.5rem] hover:border-purple-500/40 transition-all group shadow-xl">
+              
               <span 
-                className="text-sm font-black tracking-[0.2em] mb-2 block" 
-                style={{ color: item.color, textShadow: `0 0 10px ${item.color}50` }}
+                className="text-[10px] font-black tracking-[0.3em] mb-3 block uppercase transition-colors" 
+                style={{ color: item.color }}
               >
                 {item.date}
               </span>
               
-              <h3 className="text-xl font-bold text-white mb-1">
+              <h3 className="text-2xl font-black mb-2 text-foreground tracking-tight transition-colors">
                 {item.title}
               </h3>
               
-              <p className="text-gray-500 text-[10px] font-bold uppercase tracking-widest mb-4">
+              <p className="text-purple-600 dark:text-purple-400 text-[10px] font-black uppercase tracking-widest mb-4 opacity-80">
                 {item.location}
               </p>
               
-              <p className="text-gray-400 text-sm leading-relaxed font-medium">
+              {/* DESCRIPTION: High contrast for Light Mode */}
+              <p className="text-zinc-800 dark:text-gray-400 text-sm leading-relaxed font-medium dark:font-normal transition-colors">
                 {item.desc}
               </p>
             </div>
