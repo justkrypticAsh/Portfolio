@@ -82,7 +82,7 @@ export default function Hero() {
       >
         {[
           { label: "Download Resume", icon: <FaPaperPlane />, link: "/resume.pdf", download: true },
-          { label: "Hire Me Now", icon: <FaEnvelope />, link: "mailto:your-email@example.com", download: false }
+          { label: "Hire Me Now", icon: <FaEnvelope />, link: "mailto:ashishkanellis33@gmail.com", download: false }
         ].map((btn, idx) => (
           <a 
             key={idx}
